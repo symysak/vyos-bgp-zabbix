@@ -1,0 +1,45 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 2a12314d7b3241bc8b410278d786f8cc
+      template: 'VyOS BGP'
+      name: 'VyOS BGP'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 98f64fa8c22c47c09340f268a8912bd6
+          name: 'BGP Neighbors Discovery'
+          key: bgpNeighbors
+          delay: 1h
+          item_prototypes:
+            -
+              uuid: 487bd5366f114e81bd05338bec72670e
+              name: 'BGP Peer State {#NEIGHBOR_IP_ADDR}'
+              key: 'bgpPeerState[{#NEIGHBOR_IP_ADDR}]'
+              history: 30d
+              trigger_prototypes:
+                -
+                  uuid: ffaf3d8d542a48f7a8831a19ac7dabf6
+                  expression: |
+                    last(/VyOS BGP/bgpPeerState[{#NEIGHBOR_IP_ADDR}])>0 and 
+                    last(/VyOS BGP/bgpPeerState[{#NEIGHBOR_IP_ADDR}])<6
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/VyOS BGP/bgpPeerState[{#NEIGHBOR_IP_ADDR}])=6'
+                  name: 'BGP Neighbor {#NEIGHBOR_IP_ADDR} is not Established'
+                  priority: DISASTER
+                  manual_close: 'YES'
+                -
+                  uuid: 7c1ee5c2f80444d98c2913deef22c7f4
+                  expression: 'last(/VyOS BGP/bgpPeerState[{#NEIGHBOR_IP_ADDR}])<1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/VyOS BGP/bgpPeerState[{#NEIGHBOR_IP_ADDR}])>0'
+                  name: 'VyOS BGP Template settings is wrong ({#NEIGHBOR_IP_ADDR})'
+                  priority: WARNING
+                  manual_close: 'YES'
