@@ -3,7 +3,7 @@ import subprocess
 
 args = sys.argv
 
-cmd = ["sudo", "vtysh", "-c", "show bgp vrf HomeNOC-RT neighbor " + args[1]]
+cmd = ["sudo", "vtysh", "-c", "show bgp neighbor " + args[1]]
 res = subprocess.check_output(cmd, encoding="utf-8")
 filtered_res = subprocess.check_output(["grep", "BGP state = "], input=res, encoding="utf-8")
 

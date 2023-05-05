@@ -1,7 +1,7 @@
 import json
 import subprocess
 
-cmd = ["sudo", "vtysh", "-c", "show bgp vrf HomeNOC-RT neighbors"]
+cmd = ["sudo", "vtysh", "-c", "show bgp neighbors"]
 res = subprocess.check_output(cmd, encoding="utf-8")
 
 filtered_res = subprocess.check_output(["grep", "BGP neighbor is"], input=res, encoding="utf-8")
