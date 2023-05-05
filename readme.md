@@ -10,3 +10,6 @@ zabbixユーザでvtyshが使えるように色々設定していますが、セ
 templateをimport
 
 完成！
+## note
+Q. VyOSのsnmpで監視すればいいのでは？
+A. ザっと調べただけなので間違いだったら申し訳ないのですが、IPv6なneighborを監視できなさそうだから作りました。
